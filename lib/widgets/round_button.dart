@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 
 class RoundButton extends StatelessWidget {
   final String title;
-  final VoidCallback onTap;
   final bool loading; 
+  final VoidCallback onTap;
 
   const RoundButton({super.key, 
   required this.title,
-   required this.onTap,
-   this.loading = false
+    this.loading = false,
+   required this.onTap
+ 
    
    });
 
