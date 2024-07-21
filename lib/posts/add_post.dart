@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_firebase_app/firebase_services/realtime_database_service.dart';
+import 'package:flutter_firebase_app/ui/upload_image.dart';
 import 'package:flutter_firebase_app/utils/utils.dart';
 import 'package:flutter_firebase_app/widgets/round_button.dart';
 
@@ -77,7 +78,17 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
                 });
                 }
-            })
+            }),
+
+               SizedBox(height: 30,),
+
+            RoundButton(
+              title: 'upload image', 
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> const UploadImageScreen()));
+
+            }
+            )
           ],
         ),
       ),

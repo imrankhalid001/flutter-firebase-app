@@ -4,6 +4,7 @@ import 'package:flutter_firebase_app/firebase_services/realtime_database_service
 import 'package:flutter_firebase_app/models/quote.dart';
 import 'package:flutter_firebase_app/posts/add_post.dart';
 import 'package:flutter_firebase_app/ui/auth/login_screen.dart';
+import 'package:flutter_firebase_app/ui/image_view_screen.dart';
 import 'package:flutter_firebase_app/utils/utils.dart';
 
 class PostScreen extends StatefulWidget {
@@ -159,44 +160,56 @@ class _PostScreenState extends State<PostScreen> {
                 }
 
           return ListView.builder(
-            itemCount: filteredQuotes.length,
-            itemBuilder: (context, index) {
-              final quote = filteredQuotes[index];
-              return Card(
-                margin: EdgeInsets.all(8.0),
-                child: ListTile(
-                  title: Text(
-                    quote.title,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(quote.id),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.edit, color: Colors.blue),
-                        onPressed: () {
-                          _showEditDialog(quote);
-                        },
+                  itemCount: filteredQuotes.length,
+                  itemBuilder: (context, index) {
+                    final quote = filteredQuotes[index];
+                    return Card(
+                      margin: EdgeInsets.all(8.0),
+                      child: ListTile(
+                        title: GestureDetector(
+                          onTap: () {
+                            if (Uri.tryParse(quote.title)?.isAbsolute ?? false) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ImageViewScreen(imageUrl: quote.title),
+                                ),
+                              );
+                            }
+                          },
+                          child: Text(
+                            quote.title,
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Uri.tryParse(quote.title)?.isAbsolute ?? false ? Colors.blue : Colors.black),
+                          ),
+                        ),
+                        subtitle: Text(quote.id),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.edit, color: Colors.blue),
+                              onPressed: () {
+                                _showEditDialog(quote);
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {
+                                _databaseService.deleteQuote(quote.id);
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                      IconButton(
-                        icon: Icon(Icons.delete, color: Colors.red),
-                        onPressed: () {
-                          _databaseService.deleteQuote(quote.id);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        },
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
-    
-
-
-    )]));
+    );
       
       
   }
